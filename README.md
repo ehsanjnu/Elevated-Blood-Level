@@ -1,36 +1,44 @@
 # Elevated-Blood-Level
 R scripts for statistical analysis of Elevated Blood Level
 
-# Sociodemographic determinants and regional variation of pediatric elevated blood lead levels in Bangladesh: A survey-weighted analysis
+# Sociodemographic Determinants and Regional Variation of Pediatric Elevated Blood Lead Levels in Bangladesh
 
-This repository contains the complete, reproducible R script used for the statistical analysis and visualization in our manuscript examining elevated blood lead levels (EBLL; ≥ 5 µg/dL) among children aged 12–59 months in Bangladesh using data from the **Multiple Indicator Cluster Survey 7 (MICS7, 2025)**.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24239120.svg)](https://doi.org/10.5281/zenodo.24239120)
 
-## 📁 Repository Structure
-* `EBLL_analysis.R` — Main R script covering data merging, survey design specification, weighted prevalence estimation, LASSO variable selection, multivariable logistic/quasi-Poisson regression, marginal standardization, sensitivity analyses, and spatial mapping.
-* `data/` *(not included due to data-sharing restrictions)* — Directory for raw MICS7 SPSS datasets (`ch.sav`, `hh.sav`) and Bangladesh administrative boundary shapefiles (`bgd_admin_boundaries.shp`).
-* `outputs/` — Automatically generated directory where all publication tables (`.docx`/`.html`), summary statistics (`.csv`), high-resolution figures (`.png`), and `sessionInfo.txt` are saved.
+This repository contains the R scripts used for data preparation, variable derivation, exploratory weighted LASSO screening, and survey-weighted multivariable regression analyses for the study examining elevated blood lead levels (EBLL, ≥ 5 µg/dL) among children aged 12–59 months in Bangladesh using the 2024–2025 Multiple Indicator Cluster Survey (MICS7) dataset.
 
-## 📊 Data Availability
-The microdata used in this study are publicly available upon registration and request from the **UNICEF MICS portal** ([mics.unicef.org](https://unicef.org)). Administrative boundary shapefiles for Bangladesh can be obtained from **HDX / OCHA** ([data.humdata.org](https://humdata.org)).
+## Repository Contents
 
-## 🛠️ Prerequisites & Required R Packages
-The analysis was conducted in **R** (random seeds set at `123`, `2026`, and `2027` for full reproducibility). Install all required packages prior to running the script:
+* `MICS7_EBLL_Revised_Analysis.R`: Complete, reproducible R script covering:
+  1. Merging household (`hh.sav`) and child (`ch.sav`) datasets and codebook-based variable recoding.
+  2. Complex survey design specification (`stratum`, primary sampling unit `HH1`, and biomarker-specific weight `chblweight`) using the `survey` package.
+  3. Design-based prevalence estimation (with logit-based 95% confidence intervals) and Rao–Scott chi-square / survey-adjusted Kruskal–Wallis bivariate tests (Table 1).
+  4. Exploratory survey-weighted LASSO logistic regression (`glmnet`) with PSU-clustered 10-fold cross-validation (`lambda.min` and `lambda.1se`) and 200 PSU-bootstrap stability resamples (Figure 1).
+  5. Primary multivariable survey-weighted logistic regression (`svyglm`, quasibinomial family) on all 17 prespecified covariates, generalized variance inflation factor (GVIF) diagnostics, adjusted prevalence ratios (`quasipoisson`), and Rao–Wu bootstrap standardized prevalences (Table 2).
+  6. Sensitivity analyses (alternative thresholds ≥ 3.5 µg/dL and > 5 µg/dL, continuous log-transformed BLL, natural cubic splines for soil lead, and urban/rural stratification).
+  7. Division-level geospatial prevalence mapping using `sf` and `ggplot2` (Figure 2).
 
-```r
-install.packages(c(
-  "haven", "dplyr", "survey", "gtsummary", "glmnet",
-  "gt", "ggplot2", "sf", "marginaleffects", "car",
-  "splines", "patchwork", "scales"
-))
-```
+## Data Availability
 
-## 🚀 How to Reproduce the Analysis
-1. Clone or download this repository to your local computer.
-2. Place the MICS7 SPSS files (`ch.sav` and `hh.sav`) inside `data/raw/` and the shapefile (`bgd_admin_boundaries.shp` and associated files) inside `data/shapefiles/` (or update `in_dir`, `out_dir`, and `shp_path` at the top of the script).
-3. Open `EBLL_analysis.R` in **RStudio** and run the script sequentially from **Step 0 to Step 9**.
-4. Note: Set `regular_def <- TRUE` in Step 0 to reproduce the behavioural sensitivity analysis (regular contact ≥ 1/week vs. any contact in the past 3 months).
+The raw MICS7 datasets (`ch.sav` and `hh.sav`) are publicly available upon free registration from the [UNICEF Global MICS Program Repository](https://mics.unicef.org/surveys). Administrative boundary shapefiles (`bgd_admin1`) were obtained from the Humanitarian Data Exchange (HDX).
 
-## 📝 Citation
-If you use this code in your research, please cite our manuscript and this repository:
->*Sociodemographic determinants and regional variation of pediatric elevated blood lead levels in Bangladesh: A survey-weighted analysis*. GitHub repository: https://github.com/ehsanjnu/Elevated-Blood-Level
+## Software Environment
 
+All analyses were conducted in **R (version 4.3.1)**. Required packages:
+* `haven` (v2.5.4)
+* `dplyr` (v1.1.4)
+* `survey` (v4.4.2)
+* `glmnet` (v4.1.8)
+* `gtsummary` (v2.4.0)
+* `gt` (v1.1.0)
+* `car` (v3.1.3)
+* `splines` (v4.3.1)
+* `marginaleffects`
+* `sf` (v1.0.20)
+* `ggplot2` (v3.5.2)
+* `patchwork` (v1.3.0)
+
+## Citation
+
+If you use this code, please cite the archived repository:
+> Ahmed, E., Methun, M. I. H., Alam, M. M., & Uddin, M. S. G. (2026). *R code for: Sociodemographic determinants and regional variation of pediatric elevated blood lead levels in Bangladesh: A survey-weighted analysis of the MICS7 biomarker survey*. Zenodo. https://doi.org/10.5281/zenodo.24239120
