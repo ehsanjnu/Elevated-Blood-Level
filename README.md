@@ -32,4 +32,5 @@ install.packages(c(
 
 ## 📝 Citation
 If you use this code in your research, please cite our manuscript and this repository:
->*Sociodemographic determinants and regional variation of pediatric elevated blood lead levels in Bangladesh: A survey-weighted analysis*. GitHub repository: https://github.com
+>*Sociodemographic determinants and regional variation of pediatric elevated blood lead levels in Bangladesh: A survey-weighted analysis*. GitHub repository: https://github.com/ehsanjnu/Elevated-Blood-Level
+
